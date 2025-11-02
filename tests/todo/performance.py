@@ -63,7 +63,7 @@ def summarize(input_file,flag=0):
     
 df1 = summarize(file1,flag=1)
 df2 = summarize(file2,flag=0)
-path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+path_to_wkhtmltopdf = r'/path/to/wkhtmltopdf.exe'
 config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 html = template % (""+
         "<h2>DA performance</h2>"+df1.to_html(classes=classes) + "<br/>" +

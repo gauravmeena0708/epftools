@@ -5,7 +5,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 
-directory_path = 'F:\\Reports\\'
+directory_path = 'reports/'
 rejection_cols = ['Pending at SS/AO/AC Accounts [Rejection]']
 approver_cols = ['Pending [ Approver Pending ]', 'Pending at SS/AO/AC Accounts']
 da_cols      = ['Pending at DA','Pending at DA Accounts [EDIT]', 'Pending at DA Accounts','Pending at DA Accounts [Rejection]']
@@ -13,8 +13,8 @@ cash_cols    = ['Pending at DA SCROLL', 'Pending at Dispatch', 'Pending at CHEQU
 pension_cols = ['Pending at E-Sign', 'Pending at AC Pension [Worksheet Generation]','Pending at DA Pension [Worksheet Generation]','Pending at DA Pension [SC worksheet generation]']
 
 
-template = Path('C:\\down\\template.html').read_text()
-path_to_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+template = Path('templates/template.html').read_text()
+path_to_wkhtmltopdf = r'/path/to/wkhtmltopdf.exe'
 config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 column_name = 'processed_at_DA'
 

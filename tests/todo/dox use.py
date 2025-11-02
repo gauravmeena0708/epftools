@@ -149,10 +149,3 @@ docObj = wordObj.Documents.Open(fulldocpath)
 docObj.SaveAs(fullpdfpath, FileFormat=wdFormatPDF)
 docObj.Close()
 wordObj.Quit()
-
-"""
-import subprocess, docx, time   # first do: pip install python-docx 
-t0 = time.time()
-subprocess.call(r'C:\Program Files\LibreOffice\program\soffice.exe --headless --convert-to pdf summary.docx --outdir . --nocrashreport --nodefault --nofirststartwizard --nolockcheck --nologo --norestore"')
-print('PDF generated in %.1f sec' % (time.time()-t0))
-"""

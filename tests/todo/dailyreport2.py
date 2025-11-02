@@ -26,7 +26,7 @@ rename_cols={'MEMBER ID':'Mem ID','DESIGNATION':'Designation','A/C GROUP':'GROUP
     
     
 def make_pdf(df,fname):
-    config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+    config = pdfkit.configuration(wkhtmltopdf='/path/to/wkhtmltopdf.exe')
     if 'CLAIM TYPE' in df.columns:
         df['CLAIM TYPE'] = df['CLAIM TYPE'].map(lambda x: x[:7])
     html = template % ("<h5>"+fname[:-4]+"</h5>"+df.to_html(classes=classes))
@@ -57,11 +57,6 @@ cf5= df1[df1['STATUS'].isin(set4)].reset_index(drop=True)                  #Pend
 cf6= df1[df1['PENDING DAYS'] >=20].sort_values(by=['TASK ID','PENDING DAYS']).reset_index(drop=True)  #>20 days pendency
 cfx= df1[df1['STATUS'].isin(set1)].reset_index(drop=True)                  #DA and NTE
 cfx1= df1[(df1['STATUS'].isin(set6)) & (df1['PENDING DAYS'] >=18)].reset_index(drop=True)    
-"""
-df_issue = pd.read_excel("issues.xlsx")
-cf61 = pd.merge(left=cf6, right=df_issue[['CLAIM ID','ISSUE TRACKER']], how='left',on='CLAIM ID')
-cf61 = cf61.sort_values(by=['ISSUE TRACKER','TASK ID','PENDING DAYS'])
-"""
 
 cf7= cfx[cfx['PENDING DAYS'].isin([17,18,19])].sort_values(by=['TASK ID','PENDING DAYS']).reset_index(drop=True)
 cf8= cfx[cfx['PENDING DAYS'].isin([13,14,15,16])].sort_values(by=['TASK ID','PENDING DAYS']).reset_index(drop=True)
@@ -75,37 +70,30 @@ cf13 = pd.pivot_table(cfx1, values='CLAIM ID', index=["GROUP ID"], columns=["STA
 with pd.ExcelWriter(out_xlsx, engine="xlsxwriter") as writer:
     # Write the dataframes to the worksheets
     cf1.to_excel(writer, sheet_name='Pending at Cash-Scroll')
-    make_pdf(cf1, DOWNLOAD_DIR+"\\Claims pending at Cash-Scroll.pdf")
+    make_pdf(cf1, "Claims pending at Cash-Scroll.pdf")
     cf2.to_excel(writer, sheet_name='Pending Death Cases')
-    make_pdf(cf2, DOWNLOAD_DIR+"\\Claims pending Death cases.pdf")
+    make_pdf(cf2, "Claims pending Death cases.pdf")
     cf3.to_excel(writer, sheet_name='Pending at Pension')
-    make_pdf(cf3, DOWNLOAD_DIR+"\\Claims pending at Pension.pdf")
+    make_pdf(cf3, "Claims pending at Pension.pdf")
     cf4.to_excel(writer, sheet_name='Pending at Rejection')
-    make_pdf(cf4, DOWNLOAD_DIR+"\\Claims pending at Rejection.pdf")
+    make_pdf(cf4, "Claims pending at Rejection.pdf")
     cf5.to_excel(writer, sheet_name='Pending at Approver')
-    make_pdf(cf5, DOWNLOAD_DIR+"\\Claims pending at approver.pdf")
+    make_pdf(cf5, "Claims pending at approver.pdf")
     cf6.to_excel(writer, sheet_name='Pending >=20 days')
-    make_pdf(cf6, DOWNLOAD_DIR+"\\Claims pending 20 days.pdf")
+    make_pdf(cf6, "Claims pending 20 days.pdf")
     cf7.to_excel(writer, sheet_name='Pending for 17-19')
-    make_pdf(cf7, DOWNLOAD_DIR+"\\Claims pending for 17-19 days.pdf")
+    make_pdf(cf7, "Claims pending for 17-19 days.pdf")
     cf8.to_excel(writer, sheet_name='Pending for 13-16')
-    make_pdf(cf8, DOWNLOAD_DIR+"\\Claims pending for 13-16 days.pdf")
+    make_pdf(cf8, "Claims pending for 13-16 days.pdf")
     cf9.to_excel(writer, sheet_name='Transfer in Pending for >20')
-    make_pdf(cf9, DOWNLOAD_DIR+"\\Transfer in pending for 20 days.pdf")
+    make_pdf(cf9, "Transfer in pending for 20 days.pdf")
     cf10.to_excel(writer, sheet_name='Online Pending for 20 days')
-    make_pdf(cf10, DOWNLOAD_DIR+"\\Online Pending for 20 days.pdf")
+    make_pdf(cf10, "Online Pending for 20 days.pdf")
     cf11.to_excel(writer, sheet_name='Primary Pending for 20 days')
-    make_pdf(cf11, DOWNLOAD_DIR+"\\Primary Pending for 20 days.pdf")
+    make_pdf(cf11, "Primary Pending for 20 days.pdf")
     cf12.to_excel(writer, sheet_name='daywise at DA')
-    make_pdf(cf12, DOWNLOAD_DIR+"\\DAY wise pendency at DA.pdf")
+    make_pdf(cf12, "DAY wise pendency at DA.pdf")
     cf13.to_excel(writer, sheet_name='pending for 18 and above')
-    make_pdf(cf12, DOWNLOAD_DIR+"\\pending for 18 and above.pdf")
-
-"""import plotly.figure_factory as ff
-colorscale = [[0, '#272D31'],[.5, '#ffffff'],[1, '#ffffff']]
-fig = ff.create_table(cf12.reset_index(), colorscale=colorscale, index_title="GROUP ID")
-fig.write_image( DOWNLOAD_DIR+'\\DAY wise pendency.png')
-fig1 = ff.create_table(cf13.reset_index(), colorscale=colorscale, index_title="GROUP ID")
-fig1.write_image( DOWNLOAD_DIR+'\\pending for 18 and above.png')"""
+    make_pdf(cf12, "pending for 18 and above.pdf")
 
 print("All files completed")
