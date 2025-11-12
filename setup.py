@@ -38,9 +38,24 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.6',
+    install_requires=[
+        'pandas>=1.3.0',
+        'numpy>=1.20.0',
+        'reportlab>=3.6.0',
+        'pdfkit>=1.0.0',
+        'PyPDF2>=2.0.0',
+        'beautifulsoup4>=4.9.0',
+        'plotly>=5.0.0',
+        'requests>=2.31.0',
+        'python-docx>=1.0.0',
+        'xlsxwriter>=3.1.0',
+        'openpyxl>=3.1.0',
+        'xlrd>=2.0.1',
+    ],
     extras_require={
         'dev': ['check-manifest'],
-        # 'test': ['coverage'],
+        'ocr': ['pytesseract>=0.3.8', 'pdf2image>=1.16.0', 'Pillow>=8.0.0'],
+        'ml': ['scikit-learn>=1.0.0'],
     },
- 
+
 )

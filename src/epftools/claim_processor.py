@@ -101,15 +101,15 @@ class ClaimProcessor:
     COLUMNS  = ['CLAIM ID', 'TASK ID', 'PENDING DAYS', 'STATUS', 'CLAIM TYPE']
     RENAME_COLS  = {'CLAIM ID': 'ID', 'TASK ID': 'TASK'}
     
-    def __init__(self, cut_off1, cut_off2):
+    def __init__(self, pendency_cutoff_1, pendency_cutoff_2):
         self.status_mapping = self.STATUS_MAPPING
         self.status_mapping2 = self.STATUS_MAPPING2
         self.claim_type_mapping = self.CLAIM_TYPE_MAPPING
         self.int_mapping = self.INT_MAPPING
-        self.cut_off1 = cut_off1
-        self.cut_off2 = cut_off2
-        self.days_bins = [0,cut_off1,cut_off2,10000]
-        self.days_labels = [f'0-{cut_off1}', f'{cut_off1+1}-{cut_off2}',f'>{cut_off2}']
+        self.pendency_cutoff_1 = pendency_cutoff_1
+        self.pendency_cutoff_2 = pendency_cutoff_2
+        self.days_bins = [0,pendency_cutoff_1,pendency_cutoff_2,10000]
+        self.days_labels = [f'0-{pendency_cutoff_1}', f'{pendency_cutoff_1+1}-{pendency_cutoff_2}',f'>{pendency_cutoff_2}']
         self.columns = self.COLUMNS
         self.rename_cols = self.RENAME_COLS
 
@@ -147,12 +147,12 @@ class ClaimProcessor:
                 category = "Other"  # status
             """elif claim_type == "Int":
                 if days != self.days_labels[0]:
-                    category = f"{status} {claim_type} >{self.cut_off1}"
+                    category = f"{status} {claim_type} >{self.pendency_cutoff_1}"
                 else:
                     category = "Other"  # status
             else:
                 if days == self.days_labels[2]:
-                    category = f"{status} {claim_type} >{self.cut_off2}"
+                    category = f"{status} {claim_type} >{self.pendency_cutoff_2}"
                 else:
                     category = "Other"  # status"""
 
@@ -170,8 +170,8 @@ class ClaimProcessor:
         df['CATEGORY'] = df.apply(self.assign_categories, axis=1)
         return df
 
-    def get_flat_pivot(self,df,INDEX,COLUMN):
-        df1 = pd.pivot_table(df, values='ID', index=INDEX, columns=COLUMN, 
+    def get_flat_pivot(self,df,index_col,column_col):
+        df1 = pd.pivot_table(df, values='ID', index=index_col, columns=column_col, 
                              margins=True, aggfunc='count').fillna(0).astype(int)
         df1.columns = df1.columns.astype(str).str.join('')
         df1 = df1.rename_axis(None, axis=1)  
